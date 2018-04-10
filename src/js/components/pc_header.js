@@ -1,10 +1,9 @@
 import React from 'react';
-import {Col, Icon, Menu, Row, Tabs, message, Form, Input, Button, Checkbox, Modal} from "antd"
-import {Link,BrowserRouter as Router} from "react-router-dom"
+import {Button, Col, Form, Icon, Input, Menu, message, Modal, Row, Tabs} from "antd"
 
 
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+// const SubMenu = Menu.SubMenu;
+// const MenuItemGroup = Menu.ItemGroup;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
@@ -23,12 +22,13 @@ class PCHeader extends React.Component {
         this.handleClick = this.handleClick.bind(this)
     }
 
-    // componentWillMount(){
-    //     if (localStorage.userid!='') {
-    //         this.setState({hasLogined:true});
-    //         this.setState({userNickName:localStorage.userNickName,userid:localStorage.userid});
-    //     }
-    // };
+    //不加这一段的话每次重新访问url都需要登录，等同于判断session
+    componentWillMount() {
+        if (localStorage.userid != '') {
+            this.setState({hasLogined: true});
+            this.setState({userNickName: localStorage.userNickName, userid: localStorage.userid});
+        }
+    };
 
     setModalVisible(value) {
         this.setState({
@@ -43,19 +43,19 @@ class PCHeader extends React.Component {
         };
         var formData = this.props.form.getFieldsValue();
         console.log(formData)
-        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action="+this.state.action+"&username="+formData.userName+"&password="+formData.password+"&r_userName=" + formData.r_userName + "&r_password=" + formData.r_password + "&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions)
+        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=" + this.state.action + "&username=" + formData.userName + "&password=" + formData.password + "&r_userName=" + formData.r_userName + "&r_password=" + formData.r_password + "&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions)
             .then(response => response.json())
             .then(json => {
                 this.setState({
-                        userNickName: json.NickUserName,
-                        userId: json.UserId
-                    });
-                localStorage.userId=json.UserId;
-                localStorage.userNickName=json.NickUserName;
-                })
-        if(this.state.action=="login"){
+                    userNickName: json.NickUserName,
+                    userId: json.UserId
+                });
+                localStorage.userId = json.UserId;
+                localStorage.userNickName = json.NickUserName;
+            })
+        if (this.state.action == "login") {
             this.setState({
-                hasLogined:true
+                hasLogined: true
             })
         }
         message.success("请求成功");
@@ -63,23 +63,23 @@ class PCHeader extends React.Component {
     }
 
 
-    callback(key){
-        if(key=="1"){
+    callback(key) {
+        if (key == "1") {
             this.setState({
-                action:"login"
+                action: "login"
             })
-        }else{
+        } else {
             this.setState({
-                action:"register"
+                action: "register"
             })
         }
     }
 
-    logout(){
-        localStorage.userId="";
-        localStorage.userNickName=""
+    logout() {
+        localStorage.userId = "";
+        localStorage.userNickName = ""
         this.setState({
-            hasLogined:false
+            hasLogined: false
         })
     }
 
@@ -147,8 +147,8 @@ class PCHeader extends React.Component {
                             <Menu.Item key="keji">
                                 <Icon type="appstore"/>科技
                             </Menu.Item>
-                            <Menu.Item key="shishang">
-                                <Icon type="appstore"/>时尚
+                            <Menu.Item key="caijing">
+                                <Icon type="appstore"/>财经
                             </Menu.Item>
                             {userShow}
                         </Menu>
